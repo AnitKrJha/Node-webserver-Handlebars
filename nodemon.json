@@ -1,6 +1,6 @@
 {
     "execMap": {
-        "ts": "npx ts-node ./index.ts"
+        "ts": "npx ts-node "
     },
     "ext": "ts,"
 }

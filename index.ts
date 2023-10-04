@@ -3,7 +3,7 @@ import fastifyStatic from '@fastify/static'
 import Fastify from 'fastify'
 import handlebars from 'handlebars'
 import fastifyView from '@fastify/view'
-import { __dirname, addTodo, delTodo, Todos, toggleStatus } from './utils.ts'
+import { __dirname, addTodo, delTodo, Todos, toggleStatus } from './utils.js'
 import fastifyFormbody from '@fastify/formbody'
 const app = Fastify({ logger: true })
 app.register(fastifyStatic, {
