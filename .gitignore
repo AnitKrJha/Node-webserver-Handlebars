@@ -2,7 +2,7 @@
 node_modules/
 
 # Ignore generated JavaScript files
-
+*.js
 
 # Ignore TypeScript build output
 dist/

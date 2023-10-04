@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx nodemon",
-    "build": "npx tsc "
+    "build": "npm i && npx tsc "
   },
   "keywords": [
     "pug",
@@ -27,5 +27,9 @@
     "handlebars": "^4.7.8",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.2",
+    "typescript": "^5.2.2"
   }
 }
