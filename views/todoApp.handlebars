@@ -1,0 +1,16 @@
+<div class="todo-container">
+    <h1>Todo App
+    </h1>
+    <code>handlebars (templating)</code>
+    <br>
+    <form action="/create" method="post" class="todo-form">
+        <input class="todo-input" type="text" placeholder="Add a new todo" name="todo">
+        <button class="todo-button-submit">Create</button>
+    </form>
+    {{#if error}} <div class="error"> {{this.error}}</div>{{/if}}
+    <div class="todo-list">
+        {{#each Todos}}
+        {{> todoItem Todo=this}}
+        {{/each}}
+    </div>
+</div>

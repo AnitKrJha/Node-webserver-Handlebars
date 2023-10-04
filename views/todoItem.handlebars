@@ -1,0 +1,12 @@
+<div class="todo-item">
+    <span>{{this.todo}}</span>
+    <div class="todo-item-buttons">
+        <form action="/delete/{{this.id}}" method="post">
+            <button type="submit" class="todo-item-button-delete">Delete</button>
+
+        </form>
+        <form action="/toggle/{{this.id}}" method="post">
+            <button class="todo-item-button-${todo.status}">{{this.status}}</button>
+        </form>
+    </div>
+</div>
