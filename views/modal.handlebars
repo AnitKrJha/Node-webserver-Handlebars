@@ -1,0 +1,9 @@
+<div class="modal {{#if error}}error{{else}}warning{{/if}}">
+    <div class="modal-content" style="width: 300px;">
+        <h4>{{message}}</h4>
+        {{#if Todos}}
+        <pre>{Todos}</pre>
+        {{/if}}
+        <a href="/"><button class="gotohome">Go to Home</button></a>
+    </div>
+</div>

@@ -21,15 +21,18 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/formbody": "^7.4.0",
+    "@fastify/postgres": "^5.2.0",
     "@fastify/static": "^6.11.2",
     "@fastify/view": "^8.2.0",
     "fastify": "^4.23.2",
+    "fastify-plugin": "^4.5.1",
     "handlebars": "^4.7.8",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
     "@types/node": "^20.8.2",
+    "@types/pg": "^8.10.3",
     "typescript": "^5.2.2"
   }
 }

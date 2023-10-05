@@ -67,6 +67,8 @@
 
         .todo-list {
             margin-top: 20px;
+            max-height: max(70vh, 300px);
+            overflow-y: auto;
         }
 
         .todo-item {
@@ -77,13 +79,14 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: 16px;
         }
 
         .todo-item-button-Pending {
             background: blue;
         }
 
-        .todo-item-button-Complete {
+        .todo-item-button-Completed {
             text-decoration: line-through;
         }
 
@@ -101,6 +104,39 @@
 
         .todo-item-button-delete {
             background: rgb(255, 53, 153);
+        }
+
+        .modal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: fit-content;
+            margin-inline: auto;
+            /* Ensure the modal is on top of other content */
+        }
+
+        /* Modal content styles */
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Error and Warning styles */
+        .error.modal {
+            border: 2px solid red;
+        }
+
+        .warning.modal {
+            border: 2px solid yellow;
+        }
+
+        /* Button style */
+
+
+        button.gotohome:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>

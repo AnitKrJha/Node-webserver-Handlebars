@@ -1,9 +1,23 @@
 import { FastifyInstance, RouteOptions } from "fastify";
-import { Todos, addTodo, delTodo, toggleStatus } from "./utils.js";
-
+import { insertTodo_in_db, delTodo_from_db, toggleTodo_in_db, Todo, seedDb } from "./utils.js";
 export async function routes(app: FastifyInstance, options: RouteOptions) {
-    app.get('/surprise', (req, res) => {
-        return { number: Math.random() * 4004 }
+    app.get('/seed', async (req, res) => {
+        const client = await app.pg.connect()
+        try {
+            const rows = await seedDb(client);
+            console.log(rows);
+
+            res.headers({ "Content-type": "text/html" })
+            return res.view('modal.handlebars', { error: '', message: "Congrats the Data has been seeded!", Todos: rows }, { layout: 'layout.html' })
+
+        } catch (e: any) {
+            res.headers({ "Content-type": "text/html" })
+            return res.view('modal.handlebars', { error: 'yes', message: "Unfortunately the Data cannot be seeded!", Todos: e.message }, { layout: 'layout.html' })
+
+        } finally {
+            client.release()
+        }
+
     })
 
 
@@ -16,13 +30,28 @@ export async function routes(app: FastifyInstance, options: RouteOptions) {
 
 
 
-    app.get<{ Querystring: IQueryString }>('/', (request, response) => {
+    app.get<{ Querystring: IQueryString }>('/', async (request, response) => {
         const error = request.query.error || '';
         response.headers({ "content-type": "text/html" })
-        response.view('todoApp.handlebars', { Todos, error }, { layout: 'layout.html' })
+        const client = await app.pg.connect();
+        let Todos: Todo[] = [];
+        try {
+            const { rows } = await client.query<Todo>(`select * from "Todos"`)
+            Todos = rows
+            console.table(Todos);
+            return response.view('todoApp.handlebars', { Todos, error }, { layout: 'layout.html' })
+        } catch (e: any) {
+            return response.view('todoApp.handlebars', { Todos, error: e.message }, { layout: 'layout.html' })
+        }
+        finally {
+
+            client.release();
+        }
     })
 
-    app.post<{ Body: IBodyCreateTodo }>('/create', (req, res) => {
+    app.post<{ Body: IBodyCreateTodo }>('/create', async (req, res) => {
+
+        const client = await app.pg.connect();
         try {
             // Extract the 'todo' property from the request body and trim any leading/trailing whitespace
             const todoFromBody = req.body.todo.trim();
@@ -36,8 +65,8 @@ export async function routes(app: FastifyInstance, options: RouteOptions) {
             // Set the content type header to text/html
             res.headers({ "Content-Type": "text/html" });
 
-            // Add the 'todo' to your data store or perform relevant operations
-            addTodo(todoFromBody);
+            // Add the 'todo' to your data store or perform relevant operations to the database
+            insertTodo_in_db(todoFromBody, client);
 
             // Redirect to the home page
             res.redirect('/');
@@ -47,17 +76,20 @@ export async function routes(app: FastifyInstance, options: RouteOptions) {
 
             // Redirect to the home page with an error message based on the error's message
             res.redirect(`/?error=${error.message}`);
+        } finally {
+            client.release()
         }
     });
 
     // This route handles POST requests to the `/delete/:id` endpoint.
-    app.post<{ Params: { id: string } }>('/delete/:id', (req, res) => {
+    app.post<{ Params: { id: string } }>('/delete/:id', async (req, res) => {
+        const client = await app.pg.connect();
         try {
             // Get the `id` parameter from the request.
             const { id } = req.params;
 
             // Delete the todo item with the given `id`.
-            delTodo(id);
+            await delTodo_from_db(id, client);
 
             // Set the response content type to `text/html`.
             res.headers({ 'Content-Type': 'text/html' });
@@ -68,18 +100,23 @@ export async function routes(app: FastifyInstance, options: RouteOptions) {
             // If an error occurs, set the response content type to `text/html` and redirect the user to the home page with an error message.
             res.headers({ 'Content-Type': 'text/html' });
             res.redirect(`/?error=${e.message}`);
+        } finally {
+            client.release();
         }
     });
 
-    app.post<{ Params: { id: string } }>('/toggle/:id', (req, res) => {
+    app.post<{ Params: { id: string } }>('/toggle/:id', async (req, res) => {
+        const client = await app.pg.connect()
         try {
             const { id } = req.params;
-            toggleStatus(id);
+            await toggleTodo_in_db(id, client);
             res.headers({ "Content-type": "text/html" })
             res.redirect("/")
         } catch (err: any) {
             res.headers({ "Content-Type": "text/html" })
             res.redirect(`/?error=${err.message}`)
+        } finally {
+            client.release()
         }
     })
 }

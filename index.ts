@@ -1,12 +1,13 @@
-import { join } from 'node:path'
+import fastifyFormbody from '@fastify/formbody'
 import fastifyStatic from '@fastify/static'
+import fastifyView from '@fastify/view'
 import Fastify from 'fastify'
 import handlebars from 'handlebars'
-import fastifyView from '@fastify/view'
+import { join } from 'node:path'
+import dbConnector from './database.js'
 import { routes } from './routes.js'
-import { __dirname, addTodo, delTodo, Todos, toggleStatus } from './utils.js'
-import fastifyFormbody from '@fastify/formbody'
-const app = Fastify({ logger: true })
+import { __dirname } from './utils.js'
+const app = Fastify()
 app.register(fastifyStatic, {
     root: join(__dirname, 'public')
 })
@@ -23,9 +24,12 @@ app.register(fastifyView, {
     }
 })
 
-
+//database is registered here
+app.register(dbConnector);
 //routes are registered here.
 app.register(routes);
+
+
 
 
 
