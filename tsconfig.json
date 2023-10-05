@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
  
-    "target": "ES6",                               
+    "target": "ES2022",                               
 
     /* Modules */
     "module": "ESNext",                               
