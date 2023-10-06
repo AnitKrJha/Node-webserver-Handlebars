@@ -19,6 +19,9 @@ export async function routes(app: FastifyInstance, options: RouteOptions) {
         }
 
     })
+    app.get('/signin', (req, res) => {
+        return res.view('signin.handlebars', {}, { layout: 'layout.html' })
+    })
 
 
     interface IQueryString {

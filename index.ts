@@ -1,3 +1,4 @@
+import 'dotenv/config.js'
 import fastifyFormbody from '@fastify/formbody'
 import fastifyStatic from '@fastify/static'
 import fastifyView from '@fastify/view'
